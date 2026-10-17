@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hacia entornos digitales accesibles e incluyentes en y para el aprendizaje</title>
+<style>
+:root{--navy:#071d49;--blue:#1769e8;--cyan:#26b6d8;--purple:#8050d8;--green:#20a86b;--orange:#ff8b22;--ink:#132344;--muted:#52617c;--paper:#f5f8ff;--line:#dce5f5}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#e8edf7;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+.topbar{position:fixed;z-index:20;inset:0 0 auto;background:rgba(5,24,62,.96);color:white;display:flex;align-items:center;justify-content:space-between;padding:12px 4vw;box-shadow:0 6px 24px #071d4925}
+.brand{font-weight:800;letter-spacing:-.03em;display:flex;gap:10px;align-items:center}.brandmark{display:grid;place-items:center;background:linear-gradient(135deg,#27b6d8,#7650db);border-radius:13px;width:34px;height:34px;font-size:19px}
+nav{display:flex;gap:7px;align-items:center;flex-wrap:wrap}nav a{color:#dce8ff;text-decoration:none;font-size:12px;padding:9px 11px;border-radius:999px}nav a:hover,nav a.active{background:#ffffff1c;color:white}
+.controls{display:flex;gap:8px}.btn{border:1px solid #ffffff55;background:#ffffff12;color:white;padding:9px 13px;border-radius:12px;font-weight:700;cursor:pointer}.btn:hover{background:#ffffff2b}
+.deck{padding:86px 22px 74px;display:grid;gap:24px;max-width:1500px;margin:auto}
+.slide{min-height:calc(100vh - 160px);position:relative;overflow:hidden;border-radius:26px;background:white;box-shadow:0 14px 40px #1c376415;padding:clamp(28px,5vw,72px);display:none;isolation:isolate}
+.slide.active{display:flex;animation:appear .32s ease-out}.slide:before{content:"";position:absolute;inset:0;z-index:-2;background:radial-gradient(circle at 90% 10%,#e7efff 0,transparent 30%),linear-gradient(135deg,#fff,#f5f8ff)}
+.slide:after{content:"";position:absolute;z-index:-1;width:330px;height:330px;border-radius:50%;background:#dceaff80;right:-150px;bottom:-190px}
+@keyframes appear{from{opacity:.5;transform:translateY(8px)}to{opacity:1;transform:none}}
+.kicker{font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);display:flex;gap:10px;align-items:center}.kicker:before{content:"";width:30px;height:4px;border-radius:5px;background:currentColor}
+h1,h2,h3,p{margin-top:0}h1{font-size:clamp(42px,6vw,82px);line-height:.99;letter-spacing:-.06em;color:var(--navy);max-width:780px;margin:22px 0}h2{font-size:clamp(30px,4vw,52px);line-height:1.04;letter-spacing:-.045em;color:var(--navy);margin:15px 0 22px}h3{font-size:18px;margin-bottom:8px;letter-spacing:-.02em}p{line-height:1.6;color:var(--muted);font-size:15px}.lead{font-size:clamp(17px,2vw,22px);max-width:650px}.gradient{background:linear-gradient(90deg,#1769e8,#8050d8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero{align-items:center;justify-content:space-between;gap:35px}.hero-copy{flex:1;z-index:2}.hero-art{flex:1;min-width:280px;display:grid;place-items:center;position:relative}.hero-art .screen{width:min(100%,500px);aspect-ratio:1.12;border-radius:30px;background:linear-gradient(145deg,#0b2b65,#1259b5);padding:15px;box-shadow:0 24px 55px #153a7c35;transform:rotate(2deg)}.screen-inner{height:100%;border-radius:20px;background:#f9fbff;padding:22px;display:flex;flex-direction:column;gap:14px}.screen-top{height:12px;width:45%;border-radius:20px;background:#d9e5fc}.screen-feature{flex:1;border-radius:15px;background:linear-gradient(135deg,#d9e9ff,#f1e6ff);display:grid;place-items:center;font-size:78px}.screen-lines{height:10px;border-radius:9px;background:#d5e0f5}.screen-lines.short{width:60%}.float{position:absolute;display:grid;place-items:center;border-radius:22px;width:68px;height:68px;background:white;box-shadow:0 12px 28px #0d28601d;font-size:31px}.f1{top:3%;left:0}.f2{right:1%;top:20%}.f3{bottom:3%;left:9%}.f4{right:8%;bottom:0}
+.pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:11px 16px;background:var(--navy);color:white;font-weight:800;text-decoration:none;margin-top:12px}.pill:hover{transform:translateY(-2px)}
+.number{position:absolute;top:0;left:0;padding:14px 25px 16px;border-radius:0 0 28px 0;background:var(--blue);color:white;font-size:26px;font-weight:900}
+.content{width:100%;padding-top:20px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:19px;box-shadow:0 7px 20px #1a36740a}.card .icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:#eaf1ff;font-size:22px;margin-bottom:12px}.card p{font-size:13px;margin-bottom:0}.card.blue .icon{background:#e4efff}.card.purple .icon{background:#f0e8ff}.card.green .icon{background:#e1f6e9}.card.orange .icon{background:#fff0df}
+.orbit{min-height:340px;border-radius:28px;background:linear-gradient(145deg,#e7f1ff,#f7f0ff);display:grid;place-items:center;position:relative;overflow:hidden}.globe{width:180px;height:180px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#58d8e4,#1769e8 75%);box-shadow:inset -18px -15px 30px #082e8140,0 20px 45px #1769e82b;color:white;font-size:72px}.person{position:absolute;width:58px;height:58px;border-radius:20px;background:white;display:grid;place-items:center;font-size:28px;box-shadow:0 8px 20px #112a591b}.p1{top:12%;left:24%}.p2{top:18%;right:18%}.p3{bottom:15%;left:18%}.p4{bottom:13%;right:23%}
+.law-list{display:grid;gap:10px}.law{display:flex;gap:13px;align-items:flex-start;background:white;border:1px solid var(--line);border-radius:16px;padding:15px}.law .icon{font-size:23px}.law p{font-size:12px;margin:4px 0 0}
+.callout{border-left:4px solid var(--purple);background:#f3edff;padding:16px 18px;border-radius:0 15px 15px 0;color:#403165;line-height:1.5;font-size:14px;margin-top:17px}
+.pour{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}.pour-item{border-radius:20px;padding:19px 15px;color:white;min-height:190px}.pour-item b{display:block;font-size:44px;line-height:1;margin-bottom:16px}.pour-item h3{font-size:16px}.pour-item p{font-size:12px;color:#ffffffed}.pour-item:nth-child(1){background:#1769e8}.pour-item:nth-child(2){background:#8050d8}.pour-item:nth-child(3){background:#f08a22}.pour-item:nth-child(4){background:#159b68}
+.levels{display:flex;gap:10px;flex-wrap:wrap}.level{border:1px solid var(--line);border-radius:13px;padding:10px 13px;background:white;font-size:13px;color:var(--muted)}.level strong{color:var(--navy)}
+.tech-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:20px}.tech{border-radius:20px;padding:18px 15px;background:#fff;border:1px solid var(--line);display:flex;flex-direction:column;min-height:315px}.tech:nth-child(1){background:linear-gradient(160deg,#edf4ff,#fff)}.tech:nth-child(2){background:linear-gradient(160deg,#eaf9ef,#fff)}.tech:nth-child(3){background:linear-gradient(160deg,#fff3e7,#fff)}.tech:nth-child(4){background:linear-gradient(160deg,#f4edff,#fff)}.tech:nth-child(5){background:linear-gradient(160deg,#e9f5ff,#fff)}.tech .emoji{font-size:34px;margin:8px 0 15px}.tech h3{font-size:16px}.tech p{font-size:12px;line-height:1.5}.examples{font-size:11px;color:var(--navy);font-weight:750;margin-top:auto;padding-top:10px}
+.quote{background:var(--navy);color:white;border-radius:24px;padding:28px;display:flex;flex-direction:column;justify-content:center;min-height:220px}.quote .mark{font-size:45px;color:#4fbbe7;line-height:.7}.quote p{font-size:clamp(20px,2.5vw,28px);color:white;font-weight:800;line-height:1.25;letter-spacing:-.03em}
+.footer{position:fixed;z-index:25;bottom:0;left:0;right:0;background:#fffdf2ed;backdrop-filter:blur(12px);padding:10px 4vw;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #dbe3f0}.progress-wrap{display:flex;align-items:center;gap:12px;flex:1;max-width:420px}.progress{height:5px;background:#dce5f5;border-radius:9px;overflow:hidden;flex:1}.progress span{display:block;height:100%;width:14.28%;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width .2s}.foot-label{font-size:12px;color:var(--muted);font-weight:750}.foot-buttons{display:flex;gap:8px}.foot-buttons button{border:1px solid var(--line);background:white;color:var(--navy);padding:8px 13px;border-radius:10px;cursor:pointer;font-weight:800}
+.sources{font-size:12px;line-height:1.7}.sources a{color:#1769e8;overflow-wrap:anywhere}.end-slide{align-items:center}.end-slide .content{max-width:880px}.checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.check{background:white;border:1px solid var(--line);padding:15px;border-radius:15px;font-size:14px}.check b{color:var(--green);margin-right:7px}
+@media(max-width:900px){nav{display:none}.slide{min-height:calc(100vh - 150px);padding:38px 24px}.hero,.two-col{flex-direction:column;display:flex;align-items:stretch}.hero-art{min-height:280px}.three-col{grid-template-columns:1fr}.tech-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pour{grid-template-columns:repeat(2,1fr)}.content{padding-top:28px}.law-list{margin-top:8px}}
+@media(max-width:520px){.topbar{padding:10px 14px}.brand{font-size:13px}.controls .btn{padding:8px;font-size:11px}.deck{padding:70px 10px 68px}.slide{border-radius:19px;padding:34px 18px}.cards,.tech-grid,.checklist{grid-template-columns:1fr}.pour{grid-template-columns:1fr 1fr}.pour-item{min-height:155px;padding:14px}.pour-item b{font-size:34px}.hero-art .screen{width:100%}.foot-label{display:none}.footer{padding:9px 12px}}
+@media print{.topbar,.footer{display:none!important}.deck{padding:0;display:block}.slide{display:flex!important;min-height:95vh;page-break-after:always;box-shadow:none;border:1px solid #ddd;margin:0;border-radius:0}.slide:before{print-color-adjust:exact}.number,.pour-item,.quote{print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="brandmark">✳</span> Entornos inclusivos</div>
+  <nav id="nav">
+    <a href="#s1" class="active">Inicio</a><a href="#s2">Conceptos</a><a href="#s3">Normativa</a><a href="#s4">Teoría</a><a href="#s5">WCAG · POUR</a><a href="#s6">Tecnologías</a><a href="#s7">Cierre</a>
+  </nav>
+  <div class="controls"><button class="btn" onclick="toggleContrast()" aria-label="Alternar contraste">◐ Contraste</button><button class="btn" onclick="window.print()">Imprimir / PDF</button></div>
+</header>
+<main class="deck">
+<section class="slide hero active" id="s1" aria-label="Diapositiva 1">
+ <div class="hero-copy">
+  <div class="kicker">Aprendizaje para todas las personas</div>
+  <h1>Hacia entornos digitales <span class="gradient">accesibles e incluyentes</span> en y para el aprendizaje</h1>
+  <p class="lead">Diseñemos experiencias educativas en las que cada persona pueda acceder, participar, aprender y aportar, sin barreras digitales ni culturales.</p>
+  <a class="pill" href="#s2" onclick="go(1)">Explorar el contenido <span>→</span></a>
+  <p style="font-size:12px;margin-top:24px">Una guía visual en 7 diapositivas · Diseño universal · Diversidad cultural</p>
+ </div>
+ <div class="hero-art" aria-label="Ilustración conceptual de aprendizaje digital">
+  <div class="float f1">🌐</div><div class="float f2">💬</div><div class="float f3">🧏</div><div class="float f4">♿</div>
+  <div class="screen"><div class="screen-inner"><div class="screen-top"></div><div class="screen-feature">▶️</div><div class="screen-lines"></div><div class="screen-lines short"></div><div style="display:flex;gap:10px"><div class="screen-lines" style="height:36px;flex:1;background:#d9f2e7"></div><div class="screen-lines" style="height:36px;flex:1;background:#f0e5ff"></div></div></div></div>
+ </div>
+</section>
+<section class="slide" id="s2" aria-label="Diapositiva 2">
+ <div class="number">01</div><div class="content">
+  <div class="kicker">Concepto central</div><div class="two-col">
+   <div><h2>¿Qué es un entorno digital <span class="gradient">inclusivo e intercultural</span>?</h2>
+    <p>Es un espacio educativo en línea —plataforma, aula virtual, recurso o comunidad— diseñado para que personas con distintas capacidades, lenguas, identidades, experiencias y contextos puedan acceder a la información, comunicarse y aprender en condiciones de equidad.</p>
+    <div class="callout"><strong>La idea clave:</strong> no se trata de que todas las personas se adapten a una plataforma, sino de diseñar la plataforma considerando la diversidad desde el inicio.</div>
+   </div>
+   <div class="orbit"><div class="globe">🌎</div><span class="person p1">👩🏽‍💻</span><span class="person p2">🧑🏻‍🦽</span><span class="person p3">🧑🏿‍🎓</span><span class="person p4">🧏🏻</span></div>
+  </div>
+  <div class="three-col" style="margin-top:22px">
+   <article class="card blue"><div class="icon">♿</div><h3>Acceso</h3><p>Eliminar obstáculos técnicos, sensoriales, cognitivos y económicos que impidan entrar y utilizar los recursos.</p></article>
+   <article class="card purple"><div class="icon">🤝</div><h3>Participación</h3><p>Ofrecer distintas formas de interactuar, expresarse, colaborar y demostrar lo aprendido.</p></article>
+   <article class="card green"><div class="icon">🌱</div><h3>Reconocimiento cultural</h3><p>Incorporar lenguas, saberes comunitarios y perspectivas diversas sin estereotipos ni discriminación.</p></article>
+  </div>
+ </div>
+</section>
+<section class="slide" id="s3" aria-label="Diapositiva 3">
+ <div class="number" style="background:var(--purple)">02</div><div class="content">
+  <div class="kicker" style="color:var(--purple)">Derechos y responsabilidades</div><h2>Fundamento <span class="gradient">normativo y legal</span></h2>
+  <p class="lead">La inclusión digital educativa se apoya en el derecho a la educación, la igualdad, la no discriminación, la accesibilidad y el reconocimiento de la diversidad cultural.</p>
+  <div class="two-col" style="align-items:start">
+   <div class="law-list">
+    <article class="law"><span class="icon">🌐</span><div><h3>Convención sobre los Derechos de las Personas con Discapacidad</h3><p>Art. 9: accesibilidad, información y tecnologías. Art. 24: educación inclusiva y aprendizaje a lo largo de la vida.</p><a href="https://www.un.org/development/desa/disabilities/convention-on-the-rights-of-persons-with-disabilities.html" target="_blank" rel="noreferrer">Consultar Convención ↗</a></div></article>
+    <article class="law"><span class="icon">⚖️</span><div><h3>Constitución Política de México</h3><p>Art. 1.º: igualdad y prohibición de la discriminación. Art. 3.º: derecho a la educación y orientación inclusiva.</p><a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/CPEUM.pdf" target="_blank" rel="noreferrer">Consultar Constitución ↗</a></div></article>
+    <article class="law"><span class="icon">📘</span><div><h3>Ley General de Educación</h3><p>Establece principios para una educación equitativa, inclusiva e intercultural, con atención a las barreras para el aprendizaje y la participación.</p><a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LGE.pdf" target="_blank" rel="noreferrer">Consultar ley ↗</a></div></article>
+    <article class="law"><span class="icon">🧑‍🦽</span><div><h3>Ley General para la Inclusión de las Personas con Discapacidad</h3><p>Reconoce la accesibilidad y la inclusión como condiciones para ejercer derechos en igualdad de oportunidades.</p><a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LGIPD.pdf" target="_blank" rel="noreferrer">Consultar ley ↗</a></div></article>
+   </div>
+   <div class="card purple" style="padding:25px"><div class="icon">🧭</div><h3>¿Cómo se traduce a la práctica?</h3><p>Publicar materiales accesibles; permitir navegación con teclado y lectores de pantalla; incluir subtítulos y alternativas textuales; respetar la diversidad lingüística; y ofrecer apoyos sin segregar al alumnado.</p><div class="callout"><strong>Importante:</strong> esta síntesis es educativa, no asesoría jurídica. Para trabajos formales, verifica la versión vigente de cada ley y los artículos aplicables.</div></div>
+  </div>
+ </div>
+</section>
+<section class="slide" id="s4" aria-label="Diapositiva 4">
+ <div class="number" style="background:var(--green)">03</div><div class="content">
+  <div class="kicker" style="color:var(--green)">Ideas que orientan el diseño</div><h2>Fundamento <span class="gradient">teórico</span></h2>
+  <p class="lead">La inclusión no es una función añadida al final: es una manera de planear, enseñar, evaluar y diseñar que reconoce la diversidad como parte normal del aula.</p>
+  <div class="cards">
+   <article class="card blue"><div class="icon">🫶</div><h3>Inclusión</h3><p>Identificar y reducir barreras para que todo el alumnado esté presente, participe, aprenda y se sienta parte de la comunidad.</p></article>
+   <article class="card purple"><div class="icon">🧩</div><h3>Accesibilidad</h3><p>Diseñar contenidos y controles que puedan percibirse, comprenderse y utilizarse por personas con diferentes capacidades.</p></article>
+   <article class="card green"><div class="icon">🖱️</div><h3>Usabilidad</h3><p>Facilitar que las personas alcancen sus objetivos con eficacia, claridad y el menor esfuerzo innecesario.</p></article>
+   <article class="card orange"><div class="icon">🌎</div><h3>Interculturalidad</h3><p>Promover diálogo respetuoso entre culturas, valorar los saberes locales y evitar que una sola lengua o visión domine.</p></article>
+   <article class="card blue"><div class="icon">🛠️</div><h3>Tecnologías adaptativas</h3><p>Herramientas y funciones que ajustan la interacción o la presentación a necesidades concretas de acceso y aprendizaje.</p></article>
+   <article class="card purple"><div class="icon">🎯</div><h3>Diseño Universal para el Aprendizaje (DUA)</h3><p>Proponer múltiples formas de implicación, representación y acción/expresión para ampliar las oportunidades de aprender.</p></article>
+  </div>
+  <div class="callout">Enfoque recomendado: combinar el DUA, la accesibilidad web y la participación del alumnado en la evaluación de los recursos.</div>
+ </div>
+</section>
+<section class="slide" id="s5" aria-label="Diapositiva 5">
+ <div class="number" style="background:var(--orange)">04</div><div class="content">
+  <div class="kicker" style="color:var(--orange)">Criterios para crear experiencias accesibles</div><h2>Fundamento técnico: <span class="gradient">WCAG 2.2 y POUR</span></h2>
+  <p>Las WCAG son pautas internacionales del W3C para hacer que el contenido web sea más accesible. Su versión 2.2 organiza los criterios en cuatro principios —POUR— y contempla niveles de conformidad A, AA y AAA. <a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noreferrer">Leer el estándar oficial ↗</a></p>
+  <div class="pour">
+   <article class="pour-item"><b>P</b><h3>Perceptible</h3><p>La información debe presentarse de formas que las personas puedan percibir.</p><small>Ej.: texto alternativo, subtítulos, contraste suficiente.</small></article>
+   <article class="pour-item"><b>O</b><h3>Operable</h3><p>La interfaz y la navegación deben poder utilizarse con distintos métodos de entrada.</p><small>Ej.: teclado, foco visible, controles amplios.</small></article>
+   <article class="pour-item"><b>U</b><h3>Comprensible</h3><p>La información y el funcionamiento deben ser claros y previsibles.</p><small>Ej.: lenguaje sencillo, instrucciones y errores claros.</small></article>
+   <article class="pour-item"><b>R</b><h3>Robusto</h3><p>El contenido debe funcionar con diferentes navegadores y tecnologías de apoyo.</p><small>Ej.: HTML semántico y etiquetas accesibles.</small></article>
+  </div>
+  <h3>Niveles de conformidad</h3>
+  <div class="levels"><div class="level"><strong>A ·</strong> requisitos básicos</div><div class="level"><strong>AA ·</strong> objetivo habitual para sitios accesibles</div><div class="level"><strong>AAA ·</strong> criterios más exigentes, no siempre aplicables a todo el sitio</div></div>
+  <div class="callout">Las herramientas automáticas ayudan, pero no bastan: también hay que probar con teclado, lector de pantalla y personas usuarias reales.</div>
+ </div>
+</section>
+<section class="slide" id="s6" aria-label="Diapositiva 6">
+ <div class="number">05</div><div class="content">
+  <div class="kicker">Apoyos para aprender con autonomía</div><h2>Tecnologías adaptativas <span class="gradient">para el aprendizaje</span></h2>
+  <p>La herramienta se elige según la tarea, las preferencias de la persona, el contexto y la compatibilidad con los recursos educativos. No existe una solución única para todas las personas.</p>
+  <div class="tech-grid">
+   <article class="tech"><div class="icon">👁️</div><h3>Discapacidad visual</h3><div class="emoji">🔊</div><p>Lectores de pantalla, ampliadores, alto contraste, líneas braille y descripciones de imágenes.</p><div class="examples">Ejemplos: NVDA, JAWS, VoiceOver, ZoomText.</div></article>
+   <article class="tech"><div class="icon">👂</div><h3>Discapacidad auditiva</h3><div class="emoji">💬</div><p>Subtítulos, transcripción automática, alertas visuales, intérpretes de lengua de señas y transcripciones.</p><div class="examples">Ejemplos: subtítulos de YouTube, Live Captions, Ava.</div></article>
+   <article class="tech"><div class="icon">♿</div><h3>Discapacidad motriz</h3><div class="emoji">🖱️</div><p>Navegación por teclado, control por voz, pulsadores, ratones alternativos y seguimiento ocular.</p><div class="examples">Ejemplos: control por voz, Switch Access, Tobii Dynavox.</div></article>
+   <article class="tech"><div class="icon">🧠</div><h3>Dificultades de aprendizaje o cognitivas</h3><div class="emoji">📚</div><p>Lectura en voz alta, tipografía ajustable, organizadores visuales, instrucciones por pasos y lectura fácil.</p><div class="examples">Ejemplos: Immersive Reader, ClaroRead, Read&amp;Write.</div></article>
+   <article class="tech"><div class="icon">✨</div><h3>Basadas en inteligencia artificial</h3><div class="emoji">🤖</div><p>Apoyo para resumir, explicar con distintos niveles, generar borradores de subtítulos o adaptar materiales.</p><div class="examples">Ejemplos: asistentes de IA y herramientas de transcripción con revisión humana.</div></article>
+  </div>
+  <p style="font-size:12px;margin-top:16px"><strong>Uso responsable:</strong> la IA puede cometer errores, reproducir sesgos o exponer datos. Verifica la información, protege la privacidad y conserva la decisión pedagógica en manos de docentes y estudiantes.</p>
+ </div>
+</section>
+<section class="slide end-slide" id="s7" aria-label="Diapositiva 7">
+ <div class="content">
+  <div class="kicker">De los principios a la acción</div><h2>Una experiencia digital inclusiva se construye <span class="gradient">desde el diseño</span></h2>
+  <p class="lead">Antes de publicar una actividad, revisa estos puntos. La accesibilidad es un proceso continuo, no una casilla que se marca una sola vez.</p>
+  <div class="checklist">
+   <div class="check"><b>✓</b> Encabezados claros y lenguaje directo.</div><div class="check"><b>✓</b> Contraste adecuado y texto que se puede ampliar.</div>
+   <div class="check"><b>✓</b> Imágenes con texto alternativo significativo.</div><div class="check"><b>✓</b> Videos subtitulados y audio transcrito.</div>
+   <div class="check"><b>✓</b> Navegación completa con teclado y foco visible.</div><div class="check"><b>✓</b> Recursos descargables accesibles y ligeros.</div>
+   <div class="check"><b>✓</b> Respeto a lenguas, culturas y saberes comunitarios.</div><div class="check"><b>✓</b> Pruebas con estudiantes y tecnologías de apoyo.</div>
+  </div>
+  <div class="two-col" style="margin-top:24px;grid-template-columns:1.2fr .8fr">
+   <div><h3>Recursos para profundizar</h3><div class="sources">
+    • <a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noreferrer">W3C — WCAG 2.2</a><br>
+    • <a href="https://www.w3.org/WAI/fundamentals/accessibility-principles/" target="_blank" rel="noreferrer">W3C WAI — Principios de accesibilidad</a><br>
+    • <a href="https://www.un.org/development/desa/disabilities/convention-on-the-rights-of-persons-with-disabilities.html" target="_blank" rel="noreferrer">ONU — Convención sobre discapacidad</a><br>
+    • <a href="https://www.diputados.gob.mx/LeyesBiblio/" target="_blank" rel="noreferrer">Cámara de Diputados — Legislación federal vigente</a>
+   </div></div>
+   <div class="quote"><div class="mark">“</div><p>La tecnología inclusiva no es el futuro: es una forma de construir igualdad hoy.</p><span style="color:#bcd7ff;font-size:12px">Diseñemos en y para la diversidad.</span></div>
+  </div>
+  <p style="font-size:11px;margin-top:22px">Plantilla educativa editable · Los textos, colores y tarjetas pueden replicarse en Canva como diapositivas 16:9.</p>
+ </div>
+</section>
+</main>
+<footer class="footer"><div class="progress-wrap"><span class="foot-label" id="counter">01 / 07</span><div class="progress"><span id="bar"></span></div></div><div class="foot-buttons"><button onclick="prev()" aria-label="Diapositiva anterior">← Anterior</button><button onclick="next()" aria-label="Siguiente diapositiva">Siguiente →</button></div></footer>
+<script>
+const slides=[...document.querySelectorAll('.slide')], links=[...document.querySelectorAll('nav a')];let current=0;
+function show(n){current=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,i)=>s.classList.toggle('active',i===current));links.forEach((a,i)=>a.classList.toggle('active',i===current));document.getElementById('counter').textContent=String(current+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');document.getElementById('bar').style.width=((current+1)/slides.length*100)+'%';history.replaceState(null,'','#s'+(current+1));window.scrollTo({top:0,behavior:'smooth'});}
+function next(){show(current+1)}function prev(){show(current-1)}function go(n){show(n)}
+document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next()}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev()}});
+links.forEach((a,i)=>a.addEventListener('click',e=>{e.preventDefault();show(i)}));
+function toggleContrast(){document.body.classList.toggle('high-contrast');if(document.body.classList.contains('high-contrast')){document.documentElement.style.setProperty('--muted','#263247');document.documentElement.style.setProperty('--line','#8494ad');document.querySelectorAll('.slide').forEach(s=>s.style.background='#fff')}else{document.documentElement.style.setProperty('--muted','#52617c');document.documentElement.style.setProperty('--line','#dce5f5')}}
+const initial=location.hash.match(/s([1-7])/);if(initial)show(Number(initial[1])-1);
+</script>
+</body></html>
